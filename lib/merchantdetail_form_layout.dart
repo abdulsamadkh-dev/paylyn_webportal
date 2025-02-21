@@ -41,6 +41,7 @@ class MerchantDetailFormLayout extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hint,
           border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
         ),
       ),
     );

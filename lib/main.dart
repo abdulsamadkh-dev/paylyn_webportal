@@ -65,7 +65,7 @@ class _StepScreenState extends State<StepScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
-  int currentStep = 7;
+  int currentStep = 1;
 
   void _onNextStep() {
     if (currentStep < 8) {
@@ -102,7 +102,7 @@ class _StepScreenState extends State<StepScreen> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  appButton(name: "Ok"),
+                  appButton(name: "Ok", onPressed: _onNextStep),
                   const SizedBox(width: 30),
                   const Text('Press Enter ↵',
                       style: TextStyle(fontSize: 14, color: Colors.black54)),
@@ -180,7 +180,7 @@ class _StepScreenState extends State<StepScreen> {
                       const SizedBox(height: 10),
                       Row(
                         children: [
-                          appButton(name: "Ok"),
+                          appButton(name: "Ok", onPressed: _onNextStep),
                           const SizedBox(width: 30),
                           const Text('Press Enter ↵',
                               style: TextStyle(
@@ -196,7 +196,7 @@ class _StepScreenState extends State<StepScreen> {
         );
       case 3:
         return SizedBox(
-          width: mediaSize(context).width * 0.4,
+          width: mediaSize(context).width * 0.6,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,7 +213,7 @@ class _StepScreenState extends State<StepScreen> {
               ),
               Row(
                 children: [
-                  appButton(name: "Ok"),
+                  appButton(name: "Ok", onPressed: _onNextStep),
                   const SizedBox(width: 30),
                   const Text('Press Enter ↵',
                       style: TextStyle(fontSize: 14, color: Colors.black54)),
@@ -239,7 +239,7 @@ class _StepScreenState extends State<StepScreen> {
               const SizedBox(height: 10),
               Row(
                 children: [
-                  appButton(name: "Ok"),
+                  appButton(name: "Ok", onPressed: _onNextStep),
                   const SizedBox(width: 30),
                   const Text('Press Enter ↵',
                       style: TextStyle(fontSize: 14, color: Colors.black54)),
@@ -265,7 +265,7 @@ class _StepScreenState extends State<StepScreen> {
               const SizedBox(height: 10),
               Row(
                 children: [
-                  appButton(name: "Ok"),
+                  appButton(name: "Ok", onPressed: _onNextStep),
                   const SizedBox(width: 30),
                   const Text('Press Enter ↵',
                       style: TextStyle(fontSize: 14, color: Colors.black54)),
@@ -294,7 +294,7 @@ class _StepScreenState extends State<StepScreen> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  appButton(name: "Ok"),
+                  appButton(name: "Ok", onPressed: _onNextStep),
                   const SizedBox(width: 30),
                   const Text('Press Enter ↵',
                       style: TextStyle(fontSize: 14, color: Colors.black54)),
@@ -323,7 +323,7 @@ class _StepScreenState extends State<StepScreen> {
               ),
               Row(
                 children: [
-                  appButton(name: "Ok"),
+                  appButton(name: "Ok", onPressed: _onNextStep),
                   const SizedBox(width: 30),
                   const Text('Press Enter ↵',
                       style: TextStyle(fontSize: 14, color: Colors.black54)),
@@ -334,7 +334,28 @@ class _StepScreenState extends State<StepScreen> {
         );
 
       default:
-        return const Center(child: Text('Step content not available'));
+        return const Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Coming Soon',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 85),
+            ),
+            Text(
+              'Under Development',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25),
+            ),
+          ],
+        ));
     }
   }
 
@@ -359,72 +380,87 @@ class _StepScreenState extends State<StepScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          bool isDesktop = constraints.maxWidth > 1350;
+
+          if (isDesktop) {
+            return Stack(
               children: [
-                const SizedBox(height: 40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'PayLync.',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'Step $currentStep of 6',
-                      style:
-                          const TextStyle(fontSize: 16, color: Colors.black54),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 40),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'PayLync.',
+                            style: TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Step $currentStep of 6',
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: Center(
+                          widthFactor: 3,
+                          child: _buildStepContent(),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Expanded(
-                  child: Center(
-                    widthFactor: 3,
-                    child: _buildStepContent(),
+                Positioned(
+                  bottom: 20,
+                  right: 20,
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: _onPreviousStep,
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(0),
+                          ),
+                          child: const Icon(Icons.keyboard_arrow_up,
+                              color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(width: 2),
+                      GestureDetector(
+                        onTap: _onNextStep,
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(0),
+                          ),
+                          child: const Icon(Icons.keyboard_arrow_down,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
-            ),
-          ),
-          Positioned(
-            bottom: 20,
-            right: 20,
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: _onPreviousStep,
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                    child: const Icon(Icons.keyboard_arrow_up,
-                        color: Colors.white),
-                  ),
-                ),
-                const SizedBox(width: 2),
-                GestureDetector(
-                  onTap: _onNextStep,
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                    child: const Icon(Icons.keyboard_arrow_down,
-                        color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+            );
+          } else {
+            return const Center(
+              child: Text(
+                'Mobile version coming soon',
+                style: TextStyle(fontSize: 24),
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -448,9 +484,10 @@ class EnterEmailLayout extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: TextField(
         controller: _emailController,
-        decoration: const InputDecoration(
-          hintText: 'Email address',
+        decoration: InputDecoration(
+          hintText: "Email Address",
           border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
         ),
         keyboardType: TextInputType.emailAddress,
         // onSubmitted: (_) => _onNextStep(),
